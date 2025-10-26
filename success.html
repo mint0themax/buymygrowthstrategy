@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Thank you 💖</title>
+</head>
+<body style="font-family:Comic Sans MS, Comic Sans, cursive;text-align:center;padding-top:60px;">
+  <h2>thanks for your tip 💖</h2>
+  <p>sending your message to Min now...</p>
+
+  <script>
+    const twitter = localStorage.getItem('customerTwitter');
+    const message = localStorage.getItem('customerMessage');
+
+    if (twitter && message) {
+      fetch('https://script.google.com/macros/s/AKfycby_vaRtMTix9msPd5qTU_ZMqUOzMH8EP8NkyGUHKwU3RGrupSqfFeN1SzUSghsvkvVG/exec', {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ twitter, message })
+      });
+    }
+
+    // Optionally clear localStorage
+    localStorage.removeItem('customerTwitter');
+    localStorage.removeItem('customerMessage');
+  </script>
+</body>
+</html>
