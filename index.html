@@ -147,5 +147,28 @@
       body.appendChild(span);
     }
   </script>
+  <script>
+    const twitterInput = document.getElementById('twitter');
+    const prefix = 'https://x.com/';
+  
+    twitterInput.addEventListener('focus', () => {
+      // If the input is empty, prefill when user focuses
+      if (!twitterInput.value) {
+        twitterInput.value = prefix;
+        // Move cursor to end
+        setTimeout(() => {
+          twitterInput.setSelectionRange(prefix.length, prefix.length);
+        });
+      }
+    });
+  
+    twitterInput.addEventListener('input', () => {
+      // If user deletes part of the prefix, restore it
+      if (!twitterInput.value.startsWith(prefix)) {
+        twitterInput.value = prefix;
+        twitterInput.setSelectionRange(prefix.length, prefix.length);
+      }
+    });
+  </script>
 </body>
 </html>
