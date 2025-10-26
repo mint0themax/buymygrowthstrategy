@@ -101,6 +101,8 @@
 
     .buy-button {
       background: #ED70C8;
+      box-sizing: border-box;      /* ensures padding doesn't cause overflow */
+      text-decoration: none;
       color: white;
       border: none;
       padding: 16px;
@@ -111,6 +113,8 @@
       transition: all 0.3s ease;
       width: 60%;
       font-family: "Comic Neue", "Comic Sans MS", "Comic Sans", cursive !important;
+      cursor: pointer;
+      transition: transform .2s, box-shadow .2s, background .2s;
     }
 
     .buy-button:hover {
@@ -121,6 +125,10 @@
 
     .buy-button:active {
       transform: translateY(0);
+    }
+
+    .buy-button:focus{
+        outline: none;
     }
 
     @media (max-width: 500px) {
