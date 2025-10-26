@@ -2,29 +2,33 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Thank you 💖</title>
-</head>
-<body style="font-family:Comic Sans MS, Comic Sans, cursive;text-align:center;padding-top:60px;">
-  <h2>thanks for your tip 💖</h2>
-  <p>sending your message to Min now...</p>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Thanks 💖</title>
 
-  <script>
-    const twitter = localStorage.getItem('customerTwitter');
-    const message = localStorage.getItem('customerMessage');
+  <!-- Comic-sans style font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
 
-    if (twitter && message) {
-      fetch('https://script.google.com/macros/s/AKfycby_vaRtMTix9msPd5qTU_ZMqUOzMH8EP8NkyGUHKwU3RGrupSqfFeN1SzUSghsvkvVG/exec', {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ twitter, message })
-      });
+  <style>
+    /* Lock viewport & center card */
+    html, body { height: 100%; margin: 0; overflow: hidden; }
+    body {
+      background: #FFEAF6;
+      display: flex; align-items: center; justify-content: center;
+      min-height: 100dvh; padding: 16px; position: relative;
+      font-family: "Comic Neue", "Comic Sans MS", "Comic Sans", cursive !important;
+      box-sizing: border-box;
     }
 
-    // Optionally clear localStorage
-    localStorage.removeItem('customerTwitter');
-    localStorage.removeItem('customerMessage');
-  </script>
-</body>
-</html>
+    /* Floating emoji background (behind content) */
+    .emoji {
+      position: fixed; /* detach from layout */
+      pointer-events: none;
+      z-index: 0;
+      font-size: 18px;
+      opacity: 0.8;
+      animation: float 18s linear infinite;
+    }
+    @keyframes float {
+      0% { transform: translateY(0) rotate(0
