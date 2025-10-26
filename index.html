@@ -8,7 +8,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
 
-
   <style>
     html, body {
       height: 100%;
@@ -21,13 +20,12 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      min-height: 100vh;              /* ensure full viewport height */
+      min-height: 100vh;
       padding: 16px;
       position: relative;
       font-family: "Comic Neue", "Comic Sans MS", "Comic Sans", cursive !important;
       box-sizing: border-box;
     }
-    
 
     /* Floating emoji background */
     .emoji {
@@ -85,12 +83,17 @@
     }
 
     textarea {
-      min-height: 150px; 
+      min-height: 150px;
+      resize: vertical;
     }
 
     textarea:focus, input:focus {
       border-color: #ED70C8;
       outline: none;
+    }
+
+    textarea.error, input.error {
+      border-color: #ef4444;
     }
 
     textarea::placeholder,
@@ -99,9 +102,21 @@
       font-style: italic;
     }
 
+    .error-message {
+      color: #ef4444;
+      font-size: 0.875rem;
+      text-align: left;
+      margin-top: -8px;
+      display: none;
+    }
+
+    .error-message.show {
+      display: block;
+    }
+
     .buy-button {
       background: #ED70C8;
-      box-sizing: border-box;      /* ensures padding doesn't cause overflow */
+      box-sizing: border-box;
       text-decoration: none;
       color: white;
       border: none;
@@ -111,10 +126,9 @@
       border-radius: 10px;
       cursor: pointer;
       transition: all 0.3s ease;
-      width: 60%;
+      width: 100%;
       font-family: "Comic Neue", "Comic Sans MS", "Comic Sans", cursive !important;
-      cursor: pointer;
-      transition: transform .2s, box-shadow .2s, background .2s;
+      margin-top: 8px;
     }
 
     .buy-button:hover {
@@ -127,8 +141,8 @@
       transform: translateY(0);
     }
 
-    .buy-button:focus{
-        outline: none;
+    .buy-button:focus {
+      outline: none;
     }
 
     @media (max-width: 500px) {
@@ -142,17 +156,25 @@
   <div class="card">
     <h2>tell me something interesting 🥺</h2>
     <form id="purchaseForm">
-      <textarea id="message" name="message" placeholder="make it interesting" required></textarea>
-      <input type="url" id="twitter" name="twitter" placeholder="https://x.com/yourusername" required>
-      <a href="https://buy.stripe.com/cNi4gs6FT83S7bl1qC7AI00" class="buy-button" target="_blank" rel="noopener noreferrer">
-  tip to send a message
-      </a>
+      <div>
+        <textarea id="message" name="message" placeholder="make it interesting" required></textarea>
+        <div class="error-message" id="messageError">Please enter a message</div>
+      </div>
+      
+      <div>
+        <input type="url" id="twitter" name="twitter" placeholder="https://x.com/yourusername" required>
+        <div class="error-message" id="twitterError">Please enter a valid URL</div>
+      </div>
+      
+      <button type="submit" class="buy-button">
+        tip to send a message
+      </button>
     </form>
   </div>
 
   <script>
     const emojis = ['💖','✨'];
-    const num = 88; // number of emojis
+    const num = 88;
     const body = document.body;
 
     for (let i = 0; i < num; i++) {
@@ -170,13 +192,14 @@
   
   <script>
     const twitterInput = document.getElementById('twitter');
+    const messageInput = document.getElementById('message');
+    const messageError = document.getElementById('messageError');
+    const twitterError = document.getElementById('twitterError');
     const prefix = 'https://x.com/';
   
     twitterInput.addEventListener('focus', () => {
-      // If the input is empty, prefill when user focuses
       if (!twitterInput.value) {
         twitterInput.value = prefix;
-        // Move cursor to end
         setTimeout(() => {
           twitterInput.setSelectionRange(prefix.length, prefix.length);
         });
@@ -184,26 +207,49 @@
     });
   
     twitterInput.addEventListener('input', () => {
-      // If user deletes part of the prefix, restore it
       if (!twitterInput.value.startsWith(prefix)) {
         twitterInput.value = prefix;
         twitterInput.setSelectionRange(prefix.length, prefix.length);
       }
     });
-  </script>
-  <script>
+
     document.getElementById('purchaseForm').addEventListener('submit', function(e) {
       e.preventDefault();
       
-      const twitter = document.getElementById('twitter').value;
-      const message = document.getElementById('message').value;
-      
-      // Store data locally for after checkout
-      localStorage.setItem('customerTwitter', twitter);
-      localStorage.setItem('customerMessage', message);
-      
-      // Redirect to Stripe checkout
-      window.location.href = 'https://buy.stripe.com/cNi4gs6FT83S7bl1qC7AI00';
+      let isValid = true;
+
+      // Reset error states
+      messageInput.classList.remove('error');
+      twitterInput.classList.remove('error');
+      messageError.classList.remove('show');
+      twitterError.classList.remove('show');
+
+      // Validate message
+      if (!messageInput.value.trim()) {
+        messageInput.classList.add('error');
+        messageError.classList.add('show');
+        isValid = false;
+      }
+
+      // Validate Twitter URL
+      if (!twitterInput.value.trim() || !twitterInput.validity.valid || twitterInput.value === prefix) {
+        twitterInput.classList.add('error');
+        twitterError.classList.add('show');
+        isValid = false;
+      }
+
+      if (isValid) {
+        const twitter = twitterInput.value;
+        const message = messageInput.value;
+        
+        // Store data in sessionStorage (more secure than localStorage for temporary data)
+        sessionStorage.setItem('customerTwitter', twitter);
+        sessionStorage.setItem('customerMessage', message);
+        sessionStorage.setItem('pendingSubmission', 'true');
+        
+        // Redirect to Stripe checkout
+        window.location.href = 'https://buy.stripe.com/cNi4gs6FT83S7bl1qC7AI00';
+      }
     });
   </script>
 </body>
