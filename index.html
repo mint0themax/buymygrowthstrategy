@@ -1,5 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
+<style>
+  /* background color */
+  body {
+    background: #FFE5F6;
+    position: relative;
+  }
+
+  /* 3 tiled layers that drift at different speeds */
+  .emoji-layer {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: -1;
+    background-repeat: repeat;
+    background-size: var(--tile, 80px) var(--tile, 80px);
+    opacity: 0.75;
+    will-change: background-position;
+  }
+
+  .emoji-layer.layer-1 { animation: scroll-1 40s linear infinite; }
+  .emoji-layer.layer-2 { animation: scroll-2 55s linear infinite; opacity: 0.6; }
+  .emoji-layer.layer-3 { animation: scroll-3 70s linear infinite; opacity: 0.5; }
+
+  @keyframes scroll-1 {
+    from { background-position: 0 0; }
+    to   { background-position: 100% 100%; }
+  }
+  @keyframes scroll-2 {
+    from { background-position: 0 0; }
+    to   { background-position: -100% 100%; }
+  }
+  @keyframes scroll-3 {
+    from { background-position: 0 0; }
+    to   { background-position: 100% -100%; }
+  }
+</style>
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,7 +49,7 @@
         }
         
         body {
-            font-family: Georgia, 'Times New Roman', Times, serif;
+            font-family: "Comic Sans MS", "Comic Sans", cursive;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -156,6 +193,34 @@
         }
     </style>
 </head>
+<script>
+  // Helper: build a tiny SVG that contains a centered emoji
+  function svgEmoji(emoji) {
+    const svg =
+      `<svg xmlns='http://www.w3.org/2000/svg' width='64' height='64'>
+         <text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-size='48'>${emoji}</text>
+       </svg>`;
+    return `url("data:image/svg+xml;utf8,${encodeURIComponent(svg)}")`;
+  }
+
+  // Create 3 layers with different emojis & offsets
+  const LAYERS = [
+    { cls: 'layer-1', emoji: '💖', size: 90 },
+    { cls: 'layer-2', emoji: '🫶', size: 80 },
+    { cls: 'layer-3', emoji: '✨', size: 70 },
+  ];
+
+  LAYERS.forEach(({ cls, emoji, size }, i) => {
+    const layer = document.createElement('div');
+    layer.className = `emoji-layer ${cls}`;
+    layer.style.setProperty('--tile', `${size}px`);
+    layer.style.backgroundImage = svgEmoji(emoji);
+    // Stagger the start so movement looks more organic
+    layer.style.animationDelay = `${-i * 5}s`;
+    document.body.appendChild(layer);
+  });
+</script>
+
 <body>
     <div class="card">
     
