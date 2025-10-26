@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buy My Growth Strategy</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Georgia, 'Times New Roman', Times, serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #232323;
+            padding: 20px;
+        }
+        
+        .main-container {
+            display: flex;
+            gap: 40px;
+            max-width: 1200px;
+            width: 100%;
+            align-items: center;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 16px;
+            padding: 60px 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            max-width: 900px;
+            width: 100%;
+        }
+        
+        .content-wrapper {
+            display: flex;
+            gap: 30px;
+            align-items: flex-start;
+        }
+        
+        .tweet-section {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .tweet-section iframe {
+            width: 100% !important;
+            max-width: 100% !important;
+        }
+        
+        .form-section {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        h1 {
+            font-size: 1.5rem;
+            color: #1a202c;
+            margin-bottom: 40px;
+            font-weight: 400;
+            text-transform: lowercase;
+        }
+        
+        .form-group {
+            margin-bottom: 24px;
+            text-align: left;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #4a5568;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+        
+        input, textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: border-color 0.3s ease;
+        }
+        
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        .buy-button {
+            background: #232323;
+            color: white;
+            border: none;
+            padding: 18px 48px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            width: 100%;
+            margin-top: 12px;
+            font-family: Georgia, 'Times New Roman', Times, serif;
+        }
+        
+        .buy-button:hover {
+            background: #ED70C8;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(237, 112, 200, 0.4);
+        }
+        
+        .buy-button:active {
+            transform: translateY(0);
+        }
+        
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 1.25rem;
+            }
+            
+            .container {
+                padding: 40px 30px;
+            }
+            
+            .content-wrapper {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <div class="container">
+            <h1>are you here to learn more about my growth strategy?</h1>
+            <div class="content-wrapper">
+                <div class="tweet-section">
+                    <blockquote class="twitter-tweet" data-theme="light">
+                        <a href="https://x.com/mint0themax/status/1981848136688812281"></a>
+                    </blockquote>
+                </div>
+                <div class="form-section">
+            <form id="purchaseForm">
+                <div class="form-group">
+                    <label for="twitter">what's your twitter</label>
+                    <input 
+                        type="url" 
+                        id="twitter" 
+                        name="twitter" 
+                        placeholder="https://twitter.com/yourusername"
+                        required
+                    >
+                </div>
+                
+                <div class="form-group">
+                    <label for="message">what do you want to say to me?</label>
+                    <textarea 
+                        id="message" 
+                        name="message" 
+                        placeholder="Tell me a bit about yourself or your goals..."
+                    ></textarea>
+                </div>
+                
+                <button type="submit" class="buy-button">send this message for $1</button>
+            </form>
+        </div>
+        </div>
+    </div>
+    </div>
+    
+    <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+    <script>
+        document.getElementById('purchaseForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const twitter = document.getElementById('twitter').value;
+            const message = document.getElementById('message').value;
+            const button = document.querySelector('.buy-button');
+            
+            // Disable button and show loading
+            button.textContent = 'sending...';
+            button.disabled = true;
+            
+            try {
+                // Send to Google Sheets
+                await fetch('https://script.google.com/macros/s/AKfycby_vaRtMTix9msPd5qTU_ZMqUOzMH8EP8NkyGUHKwU3RGrupSqfFeN1SzUSghsvkvVG/exec', {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        twitter: twitter,
+                        message: message
+                    })
+                });
+                
+                // Redirect to Stripe after saving
+                window.location.href = 'https://buy.stripe.com/test_dRm6oIccR3xf06H1O35AQ00';
+            } catch (error) {
+                console.error('Error:', error);
+                // Still redirect to Stripe even if sheet fails
+                window.location.href = 'https://buy.stripe.com/test_dRm6oIccR3xf06H1O35AQ00';
+            }
+        });
+    </script>
+</body>
+</html>
