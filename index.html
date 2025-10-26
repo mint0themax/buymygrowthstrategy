@@ -13,17 +13,19 @@
     html, body {
       height: 100%;
       margin: 0;
-      overflow: hidden;   
+      overflow: hidden;
     }
     
     body {
-      background: #FFEAF6;          
+      background: #FFEAF6;
       display: flex;
       align-items: center;
-      justify-content: center;     
-      padding: 16px;                
+      justify-content: center;
+      min-height: 100vh;              /* ensure full viewport height */
+      padding: 16px;
       position: relative;
       font-family: "Comic Neue", "Comic Sans MS", "Comic Sans", cursive !important;
+      box-sizing: border-box;
     }
     
 
