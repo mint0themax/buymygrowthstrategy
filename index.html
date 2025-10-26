@@ -136,7 +136,9 @@
     <form id="purchaseForm">
       <textarea id="message" name="message" placeholder="make it interesting"></textarea>
       <input type="url" id="twitter" name="twitter" placeholder="https://x.com/yourusername" required>
-      <button type="submit" class="buy-button">tip to send a message</button>
+      <a href="https://buy.stripe.com/cNi4gs6FT83S7bl1qC7AI00" class="buy-button" target="_blank" rel="noopener noreferrer">
+  tip to send a message
+      </a>
     </form>
   </div>
 
@@ -157,6 +159,7 @@
       body.appendChild(span);
     }
   </script>
+  
   <script>
     const twitterInput = document.getElementById('twitter');
     const prefix = 'https://x.com/';
@@ -178,6 +181,21 @@
         twitterInput.value = prefix;
         twitterInput.setSelectionRange(prefix.length, prefix.length);
       }
+    });
+  </script>
+  <script>
+    document.getElementById('purchaseForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const twitter = document.getElementById('twitter').value;
+      const message = document.getElementById('message').value;
+      
+      // Store data locally for after checkout
+      localStorage.setItem('customerTwitter', twitter);
+      localStorage.setItem('customerMessage', message);
+      
+      // Redirect to Stripe checkout
+      window.location.href = 'https://buy.stripe.com/cNi4gs6FT83S7bl1qC7AI00';
     });
   </script>
 </body>
